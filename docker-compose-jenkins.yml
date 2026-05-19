@@ -1,0 +1,33 @@
+services:
+  # Servicio de base de datos PostgreSQL
+  db:
+    # Imagen oficial de PostgreSQL 15
+    image: postgres:15
+    # Variables de entorno que configuran la base de datos
+    environment:
+      POSTGRES_DB: store          # Nombre de la base de datos
+      POSTGRES_USER: app          # Usuario de base de datos
+      POSTGRES_PASSWORD: secr3t   # Contraseña del usuario
+    # Mapeo de puertos: host:contenedor
+    ports:
+      - "5432:5432"               # Puerto 5432 accesible desde fuera
+
+  # Servicio de la aplicación Java
+  app:
+    # la imagen se llama store-app y la hemos generado con 
+    # docker build -t store-app .
+    image: store-app
+    ports:
+      # Exponer el puerto 8888 del contenedor al host
+      - "8888:8888"
+    # Va a esperar a que arranque la aplicación BBDD primero  
+    depends_on:
+      - db
+    environment:
+      # url para consultar con BBDD
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/store
+      # Usuario de BBDD
+      SPRING_DATASOURCE_USERNAME: app
+      # contraseña de BBDD
+      SPRING_DATASOURCE_PASSWORD: secr3t
+
