@@ -7,9 +7,9 @@ WORKDIR /app
 
 # Copia el JAR generado por Jenkins
 # Para local y Jenkins
-#COPY target/*.jar app.jar
+COPY target/*.jar app.jar
 # Para github actions
-COPY artifact/*.jar app.jar
+#COPY artifact/*.jar app.jar
 
 # Indica el puerto por el que la aplicación escuchará dentro del contenedor
 EXPOSE 8888
